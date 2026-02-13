@@ -1,5 +1,17 @@
 # ASKQE: Question Answering as Automatic Evaluation for Machine Translation
 
+## Project Description
+This repository contains the implementation and extension of the [AskQE framework](https://github.com/dayeonki/askqe) that utilizes LLMs to verify semantic consistency through question generation and Back-Translation.
+
+In this study, we revisited the original AskQE pipeline, evaluated the capability of small, quantized LLMs (4B-14B parameters) to act as interpretable evaluators under compute constraints, and developed architectural improvements that outperform the baseline approach.
+
+## Key Features & Results
+* **Replication & Benchmarking:** Conducted a comparative analysis of various quantized models (Qwen, Llama, Gemma, Mistral families) on the BioMQM dataset. **Qwen3-4B-Instruct** was selected as the primary backbone.
+* **Multi-Lingual LLM Judge:** Introduced a direct **Source-Target comparison** strategy that bypasses back-translation, reducing information loss and outperforming traditional metrics.
+* **SOTA Fine-Tuning:** Developed a specialized model fine-tuned on BioMQM, achieving **State-of-the-Art** correlation with human judgments ($\tau \approx 0.41$) and record decision accuracy ($82\%$).
+
+TODO: add other extensions
+
 ## Repository Structure
 
 - **LLM Judge/**: Directory containing implementations of various LLM judges.
