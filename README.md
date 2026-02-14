@@ -1,4 +1,4 @@
-# ASKQE: Question Answering as Automatic Evaluation for Machine Translation
+# AskQE++: Strict Binary Verification and LLM-Based Judges for Explainable Quality Estimation
 
 ## Project Description
 
