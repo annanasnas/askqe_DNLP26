@@ -7,35 +7,42 @@ This repository contains the implementation and extension of the [AskQE framewor
 ## Key Features & Results
 
 - **Replication & Benchmarking:** Conducted a comparative analysis of various quantized models (Qwen, Llama, Gemma, Mistral families) on the BioMQM dataset. **Qwen3-4B-Instruct** was selected as the primary backbone.
-- **Multi-Lingual LLM Judge:** Introduced a direct **Source-Target comparison** strategy that bypasses back-translation, reducing information loss and outperforming traditional metrics.
-- **SOTA Fine-Tuning:** Developed a specialized model fine-tuned on BioMQM, achieving **State-of-the-Art** correlation with human judgments ($\tau \approx 0.41$) and record decision accuracy ($82\%$).
+- **Multilingual Direct-Judge:** Introduced a direct **Source-Target comparison** strategy that bypasses back-translation, reducing information loss and outperforming traditional metrics.
+- **Fine-Tuned Multilingual Direct-Judge:** Developed a specialized model fine-tuned on BioMQM, achieving high correlation with human judgments ($\tau \approx 0.41$) and high decision accuracy ($82\%$).
 - **Binary QA Extension:** Reformulated AskQE as a Binary Yes/No verification framework with a four-channel hybrid question generator (template, SRL, word-difference, atomic facts).
 
 ## Repository Structure
 
+- **baseline/**: Directory with baseline solutions for various models (Qwen, Yi, Gemma, etc.).
+  - In each subdirectory (e.g., `01-ai:Yi-1.5-9B-Chat/`):
+    - `Golden_Baseline.ipynb`: Notebook implementing the baseline for a specific model.
+    - `askqe_data.jsonl`, `askqe_results.jsonl`, `askqe_results_final.jsonl`: Experiment data and obtained metrics.
+
 - **LLM Judge/**: Directory containing implementations of various LLM judges.
-  - **Mono/**: **Mono-lingual LLM Judge**.
+  - **Mono/**: **Monolingual QA-Judge**.
     - **Methodology**: Evaluates translation quality by performing a semantic consistency check between answers derived from the **Source Sentence** and answers derived from the **Back-translation**.
     - **Process**: An LLM (`Qwen/Qwen3-4B-Instruct-2507`) compares the _Source Answers_ against the _Back-translation Answers_ to detect semantic conflicts.
     - **Scoring**: Mismatches are classified into severity levels: **CRITICAL** (contradictions, factually wrong), **MAJOR** (missing key details or hallucinated info), **MINOR** (slight precision loss), or **NONE** (semantically equivalent).
     - `Golden_LLM_Judge_Mono.ipynb`: Main notebook implementing the pipeline.
     - `askqe_results.jsonl`, `askqe_data.jsonl`: Experiment data.
 
-  - **Multi/**: **Multi-lingual LLM Judge**.
+  - **Multi/**: **Multi-lingual Direct-Judge**.
     - **Methodology**: Utilizes a **direct cross-lingual evaluation strategy**, comparing the **Source Sentence** directly against the **Target Translation** without back-translation.
     - **Process**: Uses a "STRICT MODE" prompt where the LLM (`Qwen/Qwen3-4B-Instruct-2507`) extracts meaning units from the source and verifies their presence and accuracy in the target.
     - **Scoring**: Detects errors such as **Expansion** (added meaning), **Omission** (missing meaning), **Alteration** (antonyms, polarity flips), and **Hallucinations**. Assigns severity (CRITICAL/MAJOR/MINOR/NONE) based on the impact on truth conditions.
     - `Golden_LLM_Judge_Multi.ipynb`: Main notebook for the multi-judge.
+    - `askqe_results.jsonl`, `askqe_data.jsonl`: Experiment data.
 
   - **Fine Tuned/**: **Fine-Tuned Multi-lingual LLM Judge**.
-    - **Methodology**: Builds upon the Multi-Judge architecture but applies **Supervised Fine-Tuning (SFT)** to specialize the model for the biomedical domain.
+    - **Methodology**: Builds upon the Multi-Judge architecture but applies **Supervised Fine-Tuning (SFT)**.
     - **Base Model**: `unsloth/Qwen3-4B-Instruct-2507-bnb-4bit`.
-    - **Data**: Trained on a combination of the `bio-mqm-dataset` and internal `askqe` data.
+    - **Data**: Trained on the extended `bio-mqm-dataset` without local `askqe` data.
     - **Preprocessing**: Includes strict filtering (deduplication, length checks, language validation) and class balancing (downsampling common 'NONE' and 'MINOR' classes to improve sensitivity to 'MAJOR' and 'CRITICAL' errors).
     - **Training**: Fine-tuned using LoRA on prompt-response pairs to predict error classifications and generate reasoning.
     - `Golden_Fine_Tuning_Judge.ipynb`: Training notebook.
     - `Golden_LLM_Judge_Multi_Fine_Tuned.ipynb`: Inference notebook.
     - `askqe_results_final.jsonl`: Final metrics.
+    - **Download**: Final model weights are hosted on [Google Drive](https://drive.google.com/drive/folders/1WsudnOq-ZAq-UFGy6UAWOcTD6ikXTUnC?usp=sharing).
 
 - **Binary_QA/**: **Binary QA Extension** — Multilingual hybrid question generation with Boolean scoring.
   - **Methodology**: Reformulates the QA stage as a **Binary Yes/No semantic verification** framework. Instead of comparing open-ended answers with SBERT cosine similarity, each question becomes a Boolean consistency probe answered against both the source and back-translation.
@@ -52,8 +59,3 @@ This repository contains the implementation and extension of the [AskQE framewor
 
 - **ablation/**: Ablation study experiments to verify hypotheses about component contributions.
   - `Golden_Baseline_ablation.ipynb`: Notebook for analyzing the importance of baseline components.
-
-- **baseline/**: Directory with baseline solutions for various models (Qwen, Yi, Gemma, etc.).
-  - In each subdirectory (e.g., `01-ai:Yi-1.5-9B-Chat/`):
-    - `Golden_Baseline.ipynb`: Notebook implementing the baseline for a specific model.
-    - `askqe_data.jsonl`, `askqe_results.jsonl`, `askqe_results_final.jsonl`: Experiment data and obtained metrics.
