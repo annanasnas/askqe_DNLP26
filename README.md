@@ -2,9 +2,7 @@
 
 ## Project Description
 
-This repository contains the implementation and extension of the [AskQE framework](https://github.com/dayeonki/askqe) that utilizes LLMs to verify semantic consistency through question generation and Back-Translation.
-
-In this study, we revisited the original AskQE pipeline, evaluated the capability of small, quantized LLMs (4B-14B parameters) to act as interpretable evaluators under compute constraints, and developed architectural improvements that outperform the baseline approach.
+This repository contains the implementation and extension of the [AskQE framework](https://github.com/dayeonki/askqe). In this study, we revisited the original AskQE pipeline, evaluated the capability of small, quantized LLMs (4B-14B parameters) to act as interpretable evaluators under compute constraints, and developed architectural improvements that outperform the baseline approach.
 
 ## Key Features & Results
 
