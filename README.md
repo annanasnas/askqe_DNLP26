@@ -17,6 +17,7 @@ This repository contains the implementation and extension of the [AskQE framewor
   - In each subdirectory (e.g., `01-ai:Yi-1.5-9B-Chat/`):
     - `Golden_Baseline.ipynb`: Notebook implementing the baseline for a specific model.
     - `askqe_data.jsonl`, `askqe_results.jsonl`, `askqe_results_final.jsonl`: Experiment data and obtained metrics.
+  - `Qwen:Qwen3-4B-Instruct-2507/Golden_Baseline_Analysis.ipynb`: Analysis of the primary backbone model results.
 
 - **LLM Judge/**: Directory containing implementations of various LLM judges.
   - **Mono/**: **Monolingual QA-Judge**.
